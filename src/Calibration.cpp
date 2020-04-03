@@ -32,22 +32,25 @@ void Calibration::calibrate(const std::string& calibrationImagePath) {
     std::vector<cv::String> images;
     cv::glob(calibrationImagePath, images);
     std::vector<cv::Point2f> corners;
-    cv::Mat image;
+    cv::Mat imageRaw, image;
+    int count = 0;
 
     for (auto &imagePath : images){
-        image = cv::imread(imagePath);
+        imageRaw = cv::imread(imagePath);
+        cv::resize(imageRaw, image, cv::Size(1920, 1080));
+
         bool found = cv::findChessboardCorners(image, patternSize, corners);
         if (!found) {
             continue;
         }
-
+        count++;
         cv::Mat gray;
         cv::cvtColor(image, gray, cv::COLOR_BGR2GRAY);
         cv::cornerSubPix(gray, corners, cv::Size(5, 5), cv::Size(-1, -1), cv::TermCriteria(cv::TermCriteria::EPS + cv::TermCriteria::COUNT, 30, 0.0001));
         objectPoints.emplace_back(points);
         imagePoints.emplace_back(corners);
     }
-
+    printf("Calibration successful with %d/%zu images", count, images.size());
     cv::Mat R, T;
     cv::calibrateCamera(objectPoints, imagePoints, cv::Size(image.rows, image.cols), cameraMatrix, distortion, R, T);
     newCameraMatrix = cv::getOptimalNewCameraMatrix(cameraMatrix, distortion, image.size(), 0);
