@@ -24,6 +24,8 @@ public:
     void saveCalibToFile(const std::string &filePath);
 
     void loadCalibFromFile(const std::string &filePath);
+
+    const cv::Mat &getCameraMatrix() const;
 };
 
 

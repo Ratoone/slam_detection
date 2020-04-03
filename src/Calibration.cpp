@@ -77,3 +77,7 @@ void Calibration::loadCalibFromFile(const std::string& filePath){
     file["distortion"] >> distortion;
     file.release();
 }
+
+const cv::Mat &Calibration::getCameraMatrix() const {
+    return cameraMatrix;
+}

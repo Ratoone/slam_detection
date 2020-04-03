@@ -6,5 +6,5 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories(./include)
 find_package( OpenCV REQUIRED )
 
-add_executable(slam_detection main.cpp src/Calibration.cpp include/Calibration.h src/VideoStream.cpp include/VideoStream.h)
+add_executable(slam_detection main.cpp src/Calibration.cpp src/VideoStream.cpp src/Matching.cpp)
 target_link_libraries( slam_detection ${OpenCV_LIBS} )
