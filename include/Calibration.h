@@ -14,6 +14,9 @@ private:
     cv::Mat cameraMatrix;
     cv::Mat distortion;
     cv::Mat newCameraMatrix;
+    int imageWidth = 800;
+    int imageHeight = 600;
+
 public:
     explicit Calibration(const std::string &parameterFilePath, const std::string &calibrationImagePath = "");
 
@@ -25,7 +28,7 @@ public:
 
     void loadCalibFromFile(const std::string &filePath);
 
-    const cv::Mat &getCameraMatrix() const;
+    [[nodiscard]] const cv::Mat &getCameraMatrix() const;
 };
 
 

@@ -37,7 +37,7 @@ void Calibration::calibrate(const std::string& calibrationImagePath) {
 
     for (auto &imagePath : images){
         imageRaw = cv::imread(imagePath);
-        cv::resize(imageRaw, image, cv::Size(1920, 1080));
+        cv::resize(imageRaw, image, cv::Size(imageWidth, imageHeight),0,0,cv::INTER_AREA);
 
         bool found = cv::findChessboardCorners(image, patternSize, corners);
         if (!found) {
@@ -57,8 +57,9 @@ void Calibration::calibrate(const std::string& calibrationImagePath) {
 }
 
 cv::Mat Calibration::rectifyImage(const cv::Mat &image) {
-    cv::Mat undistorted;
-    cv::undistort(image, undistorted, cameraMatrix, distortion, newCameraMatrix);
+    cv::Mat resized, undistorted;
+    cv::resize(image, resized, cv::Size(imageWidth, imageHeight),0,0,cv::INTER_AREA);
+    cv::undistort(resized, undistorted, cameraMatrix, distortion, newCameraMatrix);
     return undistorted;
 }
 
