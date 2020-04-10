@@ -13,6 +13,7 @@ private:
     cv::Mat cameraMatrix;
     cv::Mat rotation = cv::Mat::eye(3, 3, CV_64F);
     cv::Mat translation = cv::Mat::zeros(3, 1, CV_64F);
+    bool shouldCompute3D = false;
 public:
     explicit Matching(cv::Mat cameraMatrix);
 

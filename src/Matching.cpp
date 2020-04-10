@@ -43,11 +43,14 @@ cv::Mat Matching::featureMatching(const cv::Mat& source, const cv::Mat& target){
             rotation.at<double>(2,0), rotation.at<double>(2,1),rotation.at<double>(2,2),translation.at<double>(2)
     ));
 
-    cv::Mat points4D, points3D;
-    cv::triangulatePoints(projectInitial, projectFinal, sourcePoints, targetPoints, points4D);
-    cv::Mat points4DChanneled = points4D.reshape(4,1);
-    cv::convertPointsFromHomogeneous(points4DChanneled, points3D);
-    return points3D;
+    if (shouldCompute3D) {
+        cv::Mat points4D, points3D;
+        cv::triangulatePoints(projectInitial, projectFinal, sourcePoints, targetPoints, points4D);
+        cv::Mat points4DChanneled = points4D.reshape(4, 1);
+        cv::convertPointsFromHomogeneous(points4DChanneled, points3D);
+        return points3D;
+    }
+    return {};
 }
 
 std::pair<cv::Mat, cv::Mat> Matching::findTransformation(std::vector<cv::Point2f>& sourcePoints, std::vector<cv::Point2f>& targetPoints){

@@ -7,39 +7,15 @@
 #include <VideoStream.h>
 #include <Matching.h>
 #include <ObjectDetection.h>
-#include <PointCloudGeneration.h>
 #include <filesystem>
-
 
 int main(){
     Calibration calib = Calibration("../parameter.dat", "../images/calibration");
     VideoStream video = VideoStream("../images/MVI_3820.MP4");
     Matching matching(calib.getCameraMatrix().clone());
-    PointCloudGeneration pointCloudGeneration(calib.getCameraMatrix().clone());
     ObjectDetection objectDetection;
 
-
     cv::Mat trajectory = cv::Mat::zeros(600, 600, CV_8UC3);
-
-//    if (std::filesystem::is_empty(framesFolder)){
-//        auto frame = video.getNextFrame();
-//        int count = 0;
-//        while (frame){
-//            auto rectifiedFrame = calib.rectifyImage(frame.value());
-//            cv::imwrite(framesFolder+"/"+std::to_string(count)+".jpg", rectifiedFrame);
-//            frame = video.getNextFrame();
-//            count++;
-//        }
-//        video.resetVideo();
-//    }
-//
-//    std::vector<std::string> frames;
-//    for (auto& framePath : std::filesystem::directory_iterator(framesFolder)){
-//        frames.emplace_back(framePath.path().string());
-//    }
-//
-//    std::vector<cv::Mat> rotations, translations, points3D;
-//    cv::sfm::reconstruct(frames, rotations, translations, calib.getCameraMatrix().clone(), points3D, true);
 
     cv::Mat frame = video.getNextFrame().value();
     std::optional<cv::Mat> next = video.getNextFrame();
