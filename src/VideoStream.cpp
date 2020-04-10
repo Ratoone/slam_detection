@@ -4,6 +4,7 @@
 
 #include "VideoStream.h"
 #include <filesystem>
+#include <opencv2/imgcodecs.hpp>
 
 VideoStream::VideoStream(const std::string &videoPath) {
     assert(std::filesystem::exists(videoPath));
@@ -17,8 +18,15 @@ std::optional<cv::Mat> VideoStream::getNextFrame(){
     if (frame.empty()){
         return std::nullopt;
     }
-
     return frame;
+}
+
+void VideoStream::resetVideo() {
+    video.set(cv::CAP_PROP_POS_FRAMES, 0);
+}
+
+int VideoStream::getFrameCount(){
+    return int(video.get(cv::CAP_PROP_FRAME_COUNT));
 }
 
 VideoStream::~VideoStream(){

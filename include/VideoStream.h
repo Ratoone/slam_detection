@@ -15,9 +15,13 @@ private:
 public:
     explicit VideoStream(const std::string& videoPath);
 
+    void resetVideo();
+
     std::optional<cv::Mat> getNextFrame();
 
     ~VideoStream();
+
+    int getFrameCount();
 };
 
 
