@@ -25,7 +25,16 @@ cv::Mat Matching::featureMatching(const cv::Mat& source, const cv::Mat& target){
     auto sourcePoints = featureDetection(source);
     auto targetPoints = featureDetection(target);
     std::vector<uchar> status;
+    //remove outliers
     cv::calcOpticalFlowPyrLK(source, target, sourcePoints, targetPoints, status, error);
+    int indexCorrection = 0;
+    for( int i=0; i < status.size(); i++){
+        if (status.at(i) == 0)	{
+            sourcePoints.erase (sourcePoints.begin() + (i - indexCorrection));
+            targetPoints.erase (targetPoints.begin() + (i - indexCorrection));
+            indexCorrection++;
+        }
+    }
 
     auto transformation =  findTransformation(sourcePoints, targetPoints);
     cv::Mat projectInitial = cameraMatrix * cv::Mat(cv::Matx34d(

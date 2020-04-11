@@ -71,6 +71,9 @@ void ObjectDetection::postprocess(cv::Mat& frame, const std::vector<cv::Mat>& ou
     for (int idx : indices)
     {
         cv::Rect box = boxes[idx];
+        if (classes[classIds[idx]] != "bicycle"){
+            continue;
+        }
         drawPred(classIds[idx], confidences[idx], box.x, box.y,
                  box.x + box.width, box.y + box.height, frame);
     }
@@ -85,7 +88,7 @@ void ObjectDetection::drawPred(int classId, float conf, int left, int top, int r
     std::string label = cv::format("%.2f", conf);
     if (!classes.empty())
     {
-        CV_Assert(classId < (int)classes.size());
+        assert(classId < (int)classes.size());
         label = classes[classId] + ":" + label;
     }
 
